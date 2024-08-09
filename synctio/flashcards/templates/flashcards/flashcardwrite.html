@@ -1,0 +1,381 @@
+
+{% extends 'main.html' %}
+{% load static %}
+
+{%block headercontent%}
+
+{%endblock headercontent%}
+{% block stylecontent%}
+
+  
+  .chat {
+    height:70vh;
+    width:70%;
+    margin:auto;
+    border: solid 1px #EEE;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color:var(--violet);
+    border-radius:20px 20px 0px 0px;
+    overflow-y:hidden;
+  }
+  
+  .messages {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message {
+    border-radius: 20px;
+    padding: 8px 15px;
+    display: inline-block;
+  }
+  
+  .yours {
+    align-items: flex-start;
+  }
+  
+  .yours .message {
+    margin-right: 25%;
+    background-color: #eee;
+    position: relative;
+  }
+  
+  .yours .message.last:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: -7px;
+    height: 20px;
+    width: 20px;
+    background: #eee;
+    border-bottom-right-radius: 15px;
+  }
+  .yours .message.last:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: -10px;
+    width: 10px;
+    height: 20px;
+    background: var(--violet);
+    border-bottom-right-radius: 10px;
+  }
+  
+  .mine {
+    align-items: flex-end;
+  }
+  
+  .mine .message {
+    color: white;
+    margin-left: 25%;
+    background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+    background-attachment: fixed;
+    position: relative;
+  }
+  
+  .mine .message.last:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    right: -8px;
+    height: 20px;
+    width: 20px;
+    background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+    background-attachment: fixed;
+    border-bottom-left-radius: 15px;
+  }
+  
+  .mine .message.last:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: -10px;
+    width: 10px;
+    height: 20px;
+    background: var(--violet);
+    border-bottom-left-radius: 10px;
+  }
+  
+#flashcard{
+    height:50vh;
+    width:50vw;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    perspective: 1000px;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+#flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+#flashcard.rotated #flashcard-inner {
+    -webkit-transform : rotateY(180deg); 
+    -moz-transform : rotateY(180deg);
+    -ms-transform : rotateY(180deg);
+    -o-transform : rotateY(180deg);
+    transform : rotateY(180deg);
+  }
+#flashcard-front, #flashcard-back {
+    cursor:pointer;
+  padding:30px;
+  border-radius:10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+#flashcard-front {
+  color: black;
+}
+#flashcard-back {
+  transform: rotateY(180deg);
+}
+#knowbtn{
+    text-align:center;
+}
+#reviewbtn{
+    text-align:center;
+}
+#reflectbtns{
+    transform: translate(0, 70vh);
+}
+#answerInput{
+  display:block;
+  margin:auto;
+  padding:2vh;
+  width:70%;
+  outline:none;
+  border:none;
+}
+.loader{
+font-size:10vw;
+}
+
+@keyframes blink {
+    50% {
+        color: transparent
+    }
+}
+
+.blink {
+    animation: 1s blink infinite
+}
+
+.blink:nth-child(2) {
+    animation-delay: 250ms
+}
+
+.blink:nth-child(3) {
+    animation-delay: 500ms
+}
+#buttoncontainer{
+width:70%;
+text-align: justify;
+
+}
+img{
+  width:15vw;
+  border-radius:20px;
+}
+
+{%endblock stylecontent%}
+{% block content %}
+<div>deck: {{deck.name}}</div>
+<div class="chat">
+  <div class="yours messages">
+    <div class="message last">
+      👋🐍
+    </div>
+  </div>
+
+</div>
+  <input id="answerInput" style="display:block;" value="">
+  <div class="text-center">
+  <div id="buttoncontainer" class="btn-group">
+    <button id="overideBtn" type="button" class="btn btn-warning btn-lg" onclick="handleFlashcardReview('overide')">overide</button>
+    <button id="okBtn" type="button" class="btn btn-warning btn-lg" onclick="handleFlashcardReview('ok')">ok</button>
+  </div>
+</div>
+<script>
+  let encouragement=["better luck next time!", "you need to study this one!", "you'll get it next time!", "that was a hard one.", "keep trying your best!"]
+  let gotRight=["you are amazing!", "you're rocking this!","WOW!!! :)","you know this!", "you're awesome!","let's gooooo!", "YAY! :D", "I'm impressed!"]
+  let imgNames=["greatJobSnake.png", "incredibleSnake.png", "keepGoingSnake.png", "youGotThisSnake.png"]
+  function generateImg(){
+    return imgNames[Math.floor(Math.random()*imgNames.length)];
+  }
+function generateResponse(review){
+  if (review=="1"){
+    return gotRight[Math.floor(Math.random()*gotRight.length)];
+  }else{
+    return encouragement[Math.floor(Math.random()*encouragement.length)];
+  }
+}
+  String.prototype.replaceAt = function(index, replacement) {
+        return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+    }
+   let flashcardAnswer=""
+  let yesnoresponse="2"
+  let flashcardidval={{flashcard.id}}
+  var stringToHTML = function (str) {
+    var parser = new DOMParser();
+      var doc = parser.parseFromString(str, 'text/html');
+      return doc.body.getElementsByTagName("form")[0];
+  };
+  document.getElementById('answerInput').addEventListener('keypress', function(e){
+    if (e.key === 'Enter'){
+        if (document.getElementById("answerInput").style.display=="block"){
+        handleFlashcardRightWrong(document.getElementById('answerInput').value)
+        }else{
+          handleFlashcardReview("ok")
+
+        }
+    }
+  });
+  function maketextmessage(person, message){
+    minetextmessage=document.createElement("div");
+    if (person=="me"){
+        minetextmessage.classList.add("mine")
+    }
+    else{
+        minetextmessage.classList.add("yours")
+    }
+    minetextmessage.classList.add("messages")
+    console.log(minetextmessage)
+    document.getElementsByClassName("chat")[0].appendChild(minetextmessage)
+    minemessage=document.createElement("div");
+    minemessage.classList.add("message")
+    minemessage.classList.add("last")
+    minemessage.innerHTML=message
+    minetextmessage.appendChild(minemessage)
+  }
+  function addLoader(){
+    let loaderdiv=document.createElement("div");
+    loaderdiv.classList.add("loader");
+    document.getElementsByClassName("chat")[0].appendChild(loaderdiv)
+    for (x=0; x<3; x++){
+      let loaddot=document.createElement("span");
+      loaddot.classList.add("blink")
+      loaddot.innerHTML="."
+      loaderdiv.appendChild(loaddot)
+    }
+    document.getElementsByClassName("chat")[0].scrollTop = document.getElementsByClassName("chat")[0].scrollHeight;
+
+  }
+  function removeLoader(){
+    let loaderdiv=document.getElementsByClassName("loader")[0]
+    loaderdiv.outerHTML=""
+    document.getElementsByClassName("chat")[0].scrollTop = document.getElementsByClassName("chat")[0].scrollHeight;
+
+  }
+    function handleFlashcardRightWrong(answer){
+        document.getElementById("answerInput").style.display="none";
+        document.getElementById("overideBtn").style.display="inline";
+        document.getElementById("okBtn").style.display="inline";    
+          addLoader()
+          console.log(document.getElementById("loader"))
+          console.log("loader made")
+        maketextmessage("me", answer)
+    document.getElementsByClassName("chat")[0].scrollTop = document.getElementsByClassName("chat")[0].scrollHeight;
+    document.getElementById("answerInput").value=""
+    const form=stringToHTML(`<form>{%csrf_token%}<input name="flashcard" value="`+flashcardidval+`"><input name="flashcardAnswer" value="`+flashcardAnswer+`"><input name="answer" value="`+answer+`"></form>`)
+    console.log(form)
+    const formData=new FormData(form)
+    console.log(formData)
+    const url="{%url 'openai' %}"
+    const xhr= new XMLHttpRequest()
+    const responseType="json"
+    xhr.responseType=responseType
+    xhr.open("POST", url)
+        console.log(xhr)
+        console.log(xhr.status)
+    xhr.onload=function(){
+      console.log(xhr.status)
+
+      if (xhr.status===200){ 
+         removeLoader()
+
+        if (xhr.response.response=="1"){
+          let img=`<br><img id="profile-img" src="`+"{% static 'synctio/images/noSnake.jpeg'%}".replace("noSnake.jpeg", generateImg())+`"><br>`
+          console.log(img)
+          maketextmessage("yours", "Yes, "+generateResponse(xhr.response.response)+img+" The answer was:<br>"+flashcardAnswer)
+        }else{
+          let img=`<br><img id="profile-img" src="`+"{% static 'synctio/images/noSnake.jpeg'%}".replace("noSnake.jpeg", generateImg())+`"><br>`
+          console.log(img)
+          maketextmessage("yours", "No, " +generateResponse(xhr.response.response)+img+" The answer was:<br>"+flashcardAnswer)
+        }
+        console.log(xhr.response)
+
+        yesnoresponse = xhr.response.response
+        document.getElementsByClassName("chat")[0].scrollTop = document.getElementsByClassName("chat")[0].scrollHeight;
+        console.log(yesnoresponse['response'])
+
+        }else if(xhr.status===400){
+          alert("error")
+        }else if(xhr.status===500){
+            alert("error")
+        }
+}
+    xhr.send(formData)
+    document.getElementsByClassName("chat")[0].scrollTop = document.getElementsByClassName("chat")[0].scrollHeight;
+
+    }
+  function handleFlashcardReview(review){
+    addLoader()
+    document.getElementById("overideBtn").style.display="none";
+    document.getElementById("okBtn").style.display="none";
+    document.getElementById("answerInput").style.display="block";
+    document.getElementById("answerInput").focus();
+
+      if (yesnoresponse=="0" && review=="overide"){
+        yesnoresponse="1"
+      }else if (yesnoresponse=="1" && review=="overide"){
+        yesnoresponse="0"
+      }
+      console.log(yesnoresponse)
+      const form=stringToHTML(`<form>{%csrf_token%}<input name="flashcard" value="`+flashcardidval+`"><input name="review" value="`+yesnoresponse+`"></form>`)
+      console.log(form)
+      const formData=new FormData(form)
+      const url="{%url 'flashcardProcessor' %}"
+      const xhr= new XMLHttpRequest()
+      const responseType="json"
+      xhr.responseType=responseType
+      xhr.open("POST", url)
+      xhr.onload=function(){
+        console.log(xhr.status)
+        if (xhr.status===200){
+    removeLoader()
+          const newFlashcard = xhr.response
+            flashcardidval=newFlashcard.id;
+            flashcardKey=newFlashcard.key;
+            flashcardAnswer=newFlashcard.answer;
+            console.log(newFlashcard.answer)
+            maketextmessage("you", flashcardKey)
+            document.getElementsByClassName("chat")[0].scrollTop = document.getElementsByClassName("chat")[0].scrollHeight;
+        }else if(xhr.status===400){
+            alert("error")
+          }else if(xhr.status===500){
+              alert("error")
+          }
+      }
+      xhr.send(formData)
+    }
+    handleFlashcardReview("ok")
+
+</script>
+{% endblock content %}

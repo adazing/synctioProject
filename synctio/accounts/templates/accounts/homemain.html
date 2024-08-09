@@ -1,0 +1,299 @@
+{%extends "main.html"%}
+{%block stylecontent%}
+    *{
+        box-sizing:border-box;
+    }
+            :root{
+            --lightblue:#006E90;
+            --teal:#1DA99D;
+            --violet:#855A82;
+            --lavender:#BAB5C7;
+            --black: #001011;
+            }
+            body{
+                margin: 0px;
+                padding: 0px;
+            }
+            .bluestart{
+                overflow:hidden;
+                background-color:var(--lightblue);
+                min-height:80vh;
+                padding-bottom: 20vmin;
+                position:relative;
+                width:100%;
+            }
+            .teal{
+                color:var(--teal);
+                z-index:5;
+            }
+            .big{
+                font-size:2.5rem;
+                z-index:5;
+            }
+            #bigicon{
+                position:fixed;
+                right:10vw;
+                font-size:30vw;
+                z-index:1;
+            }
+            .format{
+                padding:20vh 0vh 0vh 10vw;
+            }
+            .black{
+                color:var(--black);
+            }
+            .medium{
+                font-size:1.5rem;
+            }
+            .sign{
+                white-space: nowrap;
+                border-radius:20px;
+                padding:10px;
+                background-color:var(--lavender);
+                color:var(--violet);
+                outline: 10px solid rgba(255, 255, 255, 0.3);
+                font-weight:bold;
+                font-size:5vmin;
+                position:fixed;
+                opacity:0.5;
+                z-index:2;
+            }
+            #sign1{
+                top:50px;
+                right:200px;
+                position:absolute;
+
+            }
+            #sign2{
+                top:300px;
+                right:0px;
+                position:absolute;
+
+            }
+            #sign3{
+                top:200px;
+                right:100px;
+                position:absolute;
+
+            }
+            #icondiv{
+                position:relative;
+            }
+
+            .component{
+                width:100%;
+                margin:20px;
+                text-align:center;
+                border-radius:10px;
+                padding:10px;
+                background-color:white;
+                color:var(--teal);
+                outline: 10px solid rgba(255, 255, 255, 0.3);
+                transition: 0.1s linear;
+                cursor:pointer;
+            }
+            .component:hover{
+                background-color:var(--teal);
+                color:white;
+            }
+            .container{
+                z-index:5;
+                padding:30px;
+                display:flex;
+                margin-left:auto;
+                margin-right:auto;
+                width:70%;
+                position:relative;
+                justify-content:center;
+                position:relative;
+                background-color:var(--teal);
+                border-radius:50px;
+                transform:translate(0, -30%);
+           }
+           .component i{
+            font-size:20vmin;
+           }
+           .navigationtext{
+            position:absolute;
+            top:0;
+            right:60%;
+            transform:translate(0,-100px)
+           }
+           #textdiv{
+            height:100%;
+            width:50%;
+           }
+           #textdiv div p{
+            z-index:100;
+           }
+           #maintext{
+            width:100%;
+            overflow:hidden;
+            font-size:3vh;
+            position:relative;
+            text-align:justify;
+            color:var(--violet);
+
+           }
+           .infotitle{
+            right:10%;
+            width:50%;
+            text-align:right;
+            font-weight:bold;
+            font-size: 10vmin;
+            position:absolute;
+           }
+           .infotitle p{
+            font-size:5vmin;
+            background-color:rgba(255,255,255,0.7);
+           }
+           .signupbtn{
+            border: 0px;
+            width:300px;
+            font-size:10vmin;
+            background-color:var(--violet);
+            color:white;
+            border-radius:10px;
+            transition:0.5s linear
+
+           }
+           .signupbtn:hover{
+                background-color:white;
+                color:var(--violet);
+           }
+           .person{
+            font-size:6vmin;
+           }
+           a{
+            text-decoration:none;
+           }
+{%endblock stylecontent%}
+{%block content%}
+    </head>
+
+    <body>
+    <div class="bluestart">
+    <div id="icondiv">
+        <div class="sign" id="sign1">Boost Productivity</div>
+        <div class="sign" id="sign2">Stop Procrastinating</div>
+        <div class="sign" id="sign3">Keep Growing</div>
+        <i id="bigicon" class="fa-solid fa-clock teal"></i>
+    </div>
+    <div id="textdiv">
+    <div class="format"><p class="teal big">Make the <b><i>most</i></b> out of your day </p>
+    <p class="medium"><b class="teal">Synctio</b><br> <span class="black">made by students, <br>for students.</span></p>
+    </div>
+
+
+</div>
+
+</div>
+<div class="container">
+    <p class="big navigationtext"><b class="teal">Navigation</b></p>
+
+    <a class="component" href="{% url 'home'%}">Flashcards<br><br><i class="fa-solid fa-school"></i></a>
+    <a class="component" href="{% url 'schedule'%}">Timer<br><br><i class="fa-solid fa-stopwatch"></i></a>
+    <a class="component" href="{% url 'dashboard'%}">Dashboard<br><br><i class="fa-solid fa-user"></i></a>
+</div>
+<div id="maintext">
+<p>
+<div class="infotitle">Who has time to memorize all this text?</div>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus purus in massa tempor nec feugiat nisl pretium. Ullamcorper malesuada proin libero nunc consequat. Eget mi proin sed libero enim sed faucibus. In aliquam sem fringilla ut morbi tincidunt augue. Convallis aenean et tortor at risus viverra adipiscing at. Natoque penatibus et magnis dis parturient montes. Risus commodo viverra maecenas accumsan. Senectus et netus et malesuada fames. Eget arcu dictum varius duis at consectetur lorem. Leo a diam sollicitudin tempor id.
+
+Consectetur a erat nam at lectus urna duis convallis. Bibendum est ultricies integer quis auctor. Donec enim diam vulputate ut pharetra sit. Suspendisse sed nisi lacus sed viverra tellus in hac. Viverra tellus in hac habitasse platea. Accumsan sit amet nulla facilisi morbi. Sed cras ornare arcu dui vivamus arcu. Nulla facilisi etiam dignissim diam quis enim lobortis. Rhoncus aenean vel elit scelerisque mauris pellentesque. Vitae proin sagittis nisl rhoncus mattis. Tellus orci ac auctor augue mauris augue neque gravida in. Massa ultricies mi quis hendrerit dolor. Vel eros donec ac odio tempor orci dapibus ultrices in.
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+
+Cras adipiscing enim eu turpis. Ridiculus mus mauris vitae ultricies leo integer. Vitae turpis massa sed elementum tempus egestas. Dui accumsan sit amet nulla facilisi. Quam id leo in vitae. Quam nulla porttitor massa id neque aliquam. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras. Nisi lacus sed viverra tellus. Risus pretium quam vulputate dignissim suspendisse in est ante in. Aliquam sem et tortor consequat id porta nibh venenatis cras. Eu facilisis sed odio morbi quis commodo.
+
+Diam maecenas ultricies mi eget mauris pharetra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet. Adipiscing diam donec adipiscing tristique. Quam id leo in vitae turpis massa sed elementum. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate. Sed arcu non odio euismod lacinia at quis risus sed. Nisl condimentum id venenatis a. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Convallis convallis tellus id interdum velit laoreet id donec. Vel fringilla est ullamcorper eget nulla facilisi etiam. Enim eu turpis egestas pretium aenean pharetra. Aliquet eget sit amet tellus. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis. Ut pharetra sit amet aliquam id diam maecenas ultricies mi. Arcu non sodales neque sodales ut etiam sit amet. Pellentesque nec nam aliquam sem et tortor consequat id porta. Eget aliquet nibh praesent tristique magna. Interdum velit euismod in pellentesque.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus purus in massa tempor nec feugiat nisl pretium. Ullamcorper malesuada proin libero nunc consequat. Eget mi proin sed libero enim sed faucibus. In aliquam sem fringilla ut morbi tincidunt augue. Convallis aenean et tortor at risus viverra adipiscing at. Natoque penatibus et magnis dis parturient montes. Risus commodo viverra maecenas accumsan. Senectus et netus et malesuada fames. Eget arcu dictum varius duis at consectetur lorem. Leo a diam sollicitudin tempor id.
+<div class="infotitle">At Synctio, we believe in simple and smart</div>
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+Diam maecenas ultricies mi eget mauris pharetra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet. Adipiscing diam donec adipiscing tristique. Quam id leo in vitae turpis massa sed elementum. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate. Sed arcu non odio euismod lacinia at quis risus sed. Nisl condimentum id venenatis a. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Convallis convallis tellus id interdum velit laoreet id donec. Vel fringilla est ullamcorper eget nulla facilisi etiam. Enim eu turpis egestas pretium aenean pharetra. Aliquet eget sit amet tellus. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis. Ut pharetra sit amet aliquam id diam maecenas ultricies mi. Arcu non sodales neque sodales ut etiam sit amet. Pellentesque nec nam aliquam sem et tortor consequat id porta. Eget aliquet nibh praesent tristique magna. Interdum velit euismod in pellentesque.
+
+Cras adipiscing enim eu turpis. Ridiculus mus mauris vitae ultricies leo integer. Vitae turpis massa sed elementum tempus egestas. Dui accumsan sit amet nulla facilisi. Quam id leo in vitae. Quam nulla porttitor massa id neque aliquam. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras. Nisi lacus sed viverra tellus. Risus pretium quam vulputate dignissim suspendisse in est ante in. Aliquam sem et tortor consequat id porta nibh venenatis cras. Eu facilisis sed odio morbi quis commodo.
+<div class="infotitle">That's why we combine all our features onto one platform</div>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus purus in massa tempor nec feugiat nisl pretium. Ullamcorper malesuada proin libero nunc consequat. Eget mi proin sed libero enim sed faucibus. In aliquam sem fringilla ut morbi tincidunt augue. Convallis aenean et tortor at risus viverra adipiscing at. Natoque penatibus et magnis dis parturient montes. Risus commodo viverra maecenas accumsan. Senectus et netus et malesuada fames. Eget arcu dictum varius duis at consectetur lorem. Leo a diam sollicitudin tempor id.
+
+Consectetur a erat nam at lectus urna duis convallis. Bibendum est ultricies integer quis auctor. Donec enim diam vulputate ut pharetra sit. Suspendisse sed nisi lacus sed viverra tellus in hac. Viverra tellus in hac habitasse platea. Accumsan sit amet nulla facilisi morbi. Sed cras ornare arcu dui vivamus arcu. Nulla facilisi etiam dignissim diam quis enim lobortis. Rhoncus aenean vel elit scelerisque mauris pellentesque. Vitae proin sagittis nisl rhoncus mattis. Tellus orci ac auctor augue mauris augue neque gravida in. Massa ultricies mi quis hendrerit dolor. Vel eros donec ac odio tempor orci dapibus ultrices in.
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+
+Cras adipiscing enim eu turpis. Ridiculus mus mauris vitae ultricies leo integer. Vitae turpis massa sed elementum tempus egestas. Dui accumsan sit amet nulla facilisi. Quam id leo in vitae. Quam nulla porttitor massa id neque aliquam. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras. Nisi lacus sed viverra tellus. Risus pretium quam vulputate dignissim suspendisse in est ante in. Aliquam sem et tortor consequat id porta nibh venenatis cras. Eu facilisis sed odio morbi quis commodo.
+<div class="infotitle"><details><summary>Timer</summary><p>Synctio has a timer that continues counting down, even as you explore different websites or our own tools to assist in your studying.</p></details></div>
+
+Diam maecenas ultricies mi eget mauris pharetra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet. Adipiscing diam donec adipiscing tristique. Quam id leo in vitae turpis massa sed elementum. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate. Sed arcu non odio euismod lacinia at quis risus sed. Nisl condimentum id venenatis a. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Convallis convallis tellus id interdum velit laoreet id donec. Vel fringilla est ullamcorper eget nulla facilisi etiam. Enim eu turpis egestas pretium aenean pharetra. Aliquet eget sit amet tellus. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis. Ut pharetra sit amet aliquam id diam maecenas ultricies mi. Arcu non sodales neque sodales ut etiam sit amet. Pellentesque nec nam aliquam sem et tortor consequat id porta. Eget aliquet nibh praesent tristique magna. Interdum velit euismod in pellentesque.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus purus in massa tempor nec feugiat nisl pretium. Ullamcorper malesuada proin libero nunc consequat. Eget mi proin sed libero enim sed faucibus. In aliquam sem fringilla ut morbi tincidunt augue. Convallis aenean et tortor at risus viverra adipiscing at. Natoque penatibus et magnis dis parturient montes. Risus commodo viverra maecenas accumsan. Senectus et netus et malesuada fames. Eget arcu dictum varius duis at consectetur lorem. Leo a diam sollicitudin tempor id.
+
+Consectetur a erat nam at lectus urna duis convallis. Bibendum est ultricies integer quis auctor. Donec enim diam vulputate ut pharetra sit. Suspendisse sed nisi lacus sed viverra tellus in hac. Viverra tellus in hac habitasse platea. Accumsan sit amet nulla facilisi morbi. Sed cras ornare arcu dui vivamus arcu. Nulla facilisi etiam dignissim diam quis enim lobortis. Rhoncus aenean vel elit scelerisque mauris pellentesque. Vitae proin sagittis nisl rhoncus mattis. Tellus orci ac auctor augue mauris augue neque gravida in. Massa ultricies mi quis hendrerit dolor. Vel eros donec ac odio tempor orci dapibus ultrices in.
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+<div class="infotitle"><details><summary>study assistance</summary><p>Synctio has other amazing features as well! Of course, we have built in study materials like flashcards so you don't even need to leave the site when practicing!</p></details></div>
+
+Cras adipiscing enim eu turpis. Ridiculus mus mauris vitae ultricies leo integer. Vitae turpis massa sed elementum tempus egestas. Dui accumsan sit amet nulla facilisi. Quam id leo in vitae. Quam nulla porttitor massa id neque aliquam. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras. Nisi lacus sed viverra tellus. Risus pretium quam vulputate dignissim suspendisse in est ante in. Aliquam sem et tortor consequat id porta nibh venenatis cras. Eu facilisis sed odio morbi quis commodo.
+
+Diam maecenas ultricies mi eget mauris pharetra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet. Adipiscing diam donec adipiscing tristique. Quam id leo in vitae turpis massa sed elementum. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate. Sed arcu non odio euismod lacinia at quis risus sed. Nisl condimentum id venenatis a. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Convallis convallis tellus id interdum velit laoreet id donec. Vel fringilla est ullamcorper eget nulla facilisi etiam. Enim eu turpis egestas pretium aenean pharetra. Aliquet eget sit amet tellus. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis. Ut pharetra sit amet aliquam id diam maecenas ultricies mi. Arcu non sodales neque sodales ut etiam sit amet. Pellentesque nec nam aliquam sem et tortor consequat id porta. Eget aliquet nibh praesent tristique magna. Interdum velit euismod in pellentesque.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus purus in massa tempor nec feugiat nisl pretium. Ullamcorper malesuada proin libero nunc consequat. Eget mi proin sed libero enim sed faucibus. In aliquam sem fringilla ut morbi tincidunt augue. Convallis aenean et tortor at risus viverra adipiscing at. Natoque penatibus et magnis dis parturient montes. Risus commodo viverra maecenas accumsan. Senectus et netus et malesuada fames. Eget arcu dictum varius duis at consectetur lorem. Leo a diam sollicitudin tempor id.
+<div class="infotitle">So what are you waiting for?</div>
+
+Consectetur a erat nam at lectus urna duis convallis. Bibendum est ultricies integer quis auctor. Donec enim diam vulputate ut pharetra sit. Suspendisse sed nisi lacus sed viverra tellus in hac. Viverra tellus in hac habitasse platea. Accumsan sit amet nulla facilisi morbi. Sed cras ornare arcu dui vivamus arcu. Nulla facilisi etiam dignissim diam quis enim lobortis. Rhoncus aenean vel elit scelerisque mauris pellentesque. Vitae proin sagittis nisl rhoncus mattis. Tellus orci ac auctor augue mauris augue neque gravida in. Massa ultricies mi quis hendrerit dolor. Vel eros donec ac odio tempor orci dapibus ultrices in.
+
+Cras adipiscing enim eu turpis. Ridiculus mus mauris vitae ultricies leo integer. Vitae turpis massa sed elementum tempus egestas. Dui accumsan sit amet nulla facilisi. Quam id leo in vitae. Quam nulla porttitor massa id neque aliquam. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras. Nisi lacus sed viverra tellus. Risus pretium quam vulputate dignissim suspendisse in est ante in. Aliquam sem et tortor consequat id porta nibh venenatis cras. Eu facilisis sed odio morbi quis commodo.
+<div class="infotitle"><a class="signupbtn" href="{% url 'register' %}">sign up</a></div>
+
+Diam maecenas ultricies mi eget mauris pharetra. Consectetur adipiscing elit duis tristique sollicitudin nibh sit amet. Adipiscing diam donec adipiscing tristique. Quam id leo in vitae turpis massa sed elementum. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate. Sed arcu non odio euismod lacinia at quis risus sed. Nisl condimentum id venenatis a. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Convallis convallis tellus id interdum velit laoreet id donec. Vel fringilla est ullamcorper eget nulla facilisi etiam. Enim eu turpis egestas pretium aenean pharetra. Aliquet eget sit amet tellus. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis. Ut pharetra sit amet aliquam id diam maecenas ultricies mi. Arcu non sodales neque sodales ut etiam sit amet. Pellentesque nec nam aliquam sem et tortor consequat id porta. Eget aliquet nibh praesent tristique magna. Interdum velit euismod in pellentesque.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus purus in massa tempor nec feugiat nisl pretium. Ullamcorper malesuada proin libero nunc consequat. Eget mi proin sed libero enim sed faucibus. In aliquam sem fringilla ut morbi tincidunt augue. Convallis aenean et tortor at risus viverra adipiscing at. Natoque penatibus et magnis dis parturient montes. Risus commodo viverra maecenas accumsan. Senectus et netus et malesuada fames. Eget arcu dictum varius duis at consectetur lorem. Leo a diam sollicitudin tempor id.
+<div class="infotitle">Who we are</div>
+
+Consectetur a erat nam at lectus urna duis convallis. Bibendum est ultricies integer quis auctor. Donec enim diam vulputate ut pharetra sit. Suspendisse sed nisi lacus sed viverra tellus in hac. Viverra tellus in hac habitasse platea. Accumsan sit amet nulla facilisi morbi. Sed cras ornare arcu dui vivamus arcu. Nulla facilisi etiam dignissim diam quis enim lobortis. Rhoncus aenean vel elit scelerisque mauris pellentesque. Vitae proin sagittis nisl rhoncus mattis. Tellus orci ac auctor augue mauris augue neque gravida in. Massa ultricies mi quis hendrerit dolor. Vel eros donec ac odio tempor orci dapibus ultrices in.
+
+<div class="infotitle person">💻 Ada Langford<br>Programmer</div>
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+
+<div class="infotitle person">✍️ Haley Zhang<br>Script Writer and Coordinator</div>
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+
+<div class="infotitle person">🔍 Rachel Rakower<br>Researcher, Idea-Generator, and Drawer!</div>
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+
+<div class="infotitle person">📱 Sophia Lin<br>Interface Designer</div>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus purus in massa tempor nec feugiat nisl pretium. Ullamcorper malesuada proin libero nunc consequat. Eget mi proin sed libero enim sed faucibus. In aliquam sem fringilla ut morbi tincidunt augue. Convallis aenean et tortor at risus viverra adipiscing at. Natoque penatibus et magnis dis parturient montes. Risus commodo viverra maecenas accumsan. Senectus et netus et malesuada fames. Eget arcu dictum varius duis at consectetur lorem. Leo a diam sollicitudin tempor id.
+
+Consectetur a erat nam at lectus urna duis convallis. Bibendum est ultricies integer quis auctor. Donec enim diam vulputate ut pharetra sit. Suspendisse sed nisi lacus sed viverra tellus in hac. Viverra tellus in hac habitasse platea. Accumsan sit amet nulla facilisi morbi. Sed cras ornare arcu dui vivamus arcu. Nulla facilisi etiam dignissim diam quis enim lobortis. Rhoncus aenean vel elit scelerisque mauris pellentesque. Vitae proin sagittis nisl rhoncus mattis. Tellus orci ac auctor augue mauris augue neque gravida in. Massa ultricies mi quis hendrerit dolor. Vel eros donec ac odio tempor orci dapibus ultrices in.
+
+Cras tincidunt lobortis feugiat vivamus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Scelerisque varius morbi enim nunc. Sed elementum tempus egestas sed sed risus. Feugiat scelerisque varius morbi enim nunc faucibus a. Elit sed vulputate mi sit amet mauris. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum. Dui sapien eget mi proin sed libero. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Porta nibh venenatis cras sed felis. Sit amet purus gravida quis blandit turpis cursus in. Gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim. At risus viverra adipiscing at in tellus integer. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Auctor augue mauris augue neque gravida in fermentum. Tortor id aliquet lectus proin nibh nisl condimentum. Turpis egestas integer eget aliquet nibh.
+
+</p>
+</div>
+    </body>
+    <script>
+        const sign1 = document.getElementById("sign1");
+        const sign2 = document.getElementById("sign2");
+        const sign3 = document.getElementById("sign3");
+        const bigicon = document.getElementById("bigicon");
+        const infos = document.getElementsByClassName("infotitle");
+        window.addEventListener('scroll', ()=>{
+            let {scrollY} = window;
+            sign1.style.top = 0.8*scrollY +50+'px';//boost productivity
+            sign1.style.right= 0.5*scrollY+200+'px';
+            sign2.style.top = 0.7*scrollY+300+'px';//stop procrastinating
+            sign2.style.right= 0.5*scrollY+0+'px';
+            sign3.style.right= -0.3*scrollY+100+'px';//boost productivity
+            sign3.style.top = 0.8*scrollY+200+'px';
+            for(x=0; x<infos.length; x++){
+                infos[x].style.right = document.body.scrollTop-infos[x].getBoundingClientRect().top*0.02+window.innerHeight*0.015+'vw';
+            }
+            if(scrollY<1200){
+                bigicon.style.right = 0.045*scrollY+10+'vw';
+            }
+        });
+    </script>
+    {%endblock content%}

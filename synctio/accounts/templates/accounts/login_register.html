@@ -1,0 +1,59 @@
+
+{% extends 'main.html' %}
+{% load static %}
+
+{% block stylecontent %}
+label{
+    color:var(--lavender);
+    width:30%;
+    box-sizing:border-box;
+
+}
+input, select{
+    background-color:var(--lavender);
+    border:none;
+    border-radius:5px;
+    padding:5px;
+    color:var(--violet);
+    width:50%;
+    box-sizing:border-box;
+}
+input:focus, select:focus{
+    outline:none;
+}
+input[type="radio"]{
+    height:20px;
+    accent-color:var(--violet);
+}
+.container{
+    background-color:var(--violet);
+    margin-top:10%;
+    border-radius:30px;
+    padding:5%;
+    width:90%;
+    box-sizing:border-box;
+
+}
+.submitbtn{
+    background-color:var(--lavender);
+    color:var(--violet);
+    border:none;
+    outline:none;
+    padding:10px;
+    border-radius:10px;
+}
+
+{% endblock stylecontent %}
+
+{% block content%}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="container mx-auto">
+{{form.as_p}}
+        <button class="submitbtn" type="submit" name="Login">submit</button>
+
+        </div>
+    </form>
+</div>
+{% endblock content %}

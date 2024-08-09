@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Make new Deck">
+    </form>
+</div>
+<script>
+    const foldersobj=document.querySelector('[name="folder"]')
+    foldersobj.outerHTML=`
+    <select id="id_folder" name='folder'>
+    {% for folder in folders %}
+        <option value='{{folder.id}}'>{{folder.name}}</option>
+    {% endfor %}
+    </select>
+    `
+</script>
+
+{% endblock content %}

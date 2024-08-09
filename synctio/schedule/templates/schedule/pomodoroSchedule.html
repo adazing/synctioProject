@@ -1,0 +1,218 @@
+{% extends 'main.html' %}
+{% load static %}
+{%block headercontent%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{%endblock headercontent%}
+{%block stylecontent%}
+    .text{
+      padding-bottom:50px;
+      text-align:center;
+      color:white;
+      font-size:3vh;
+    }
+    #progress{
+      justify-content:center;
+      display:flex;
+      flex-direction:column;      
+    }
+    .userbox{
+        background-color:var(--violet);
+        color:white;
+        border-radius:30px;
+        width:80vw;
+        padding:30px;
+        margin-top:20px;
+    }
+    .floatright{
+      vertical-align: middle;
+
+      position:absolute;
+      color:white;
+      right:10%;
+    }
+    #timer{
+        background-color:var(--lavender);
+        width:100%;
+        border-radius:10px;
+        text-align: center;
+        padding:20px;
+    }
+    #time-left{
+    }
+    .bigtime{
+        color:black;
+        font-size: 10vw;
+        font-weight:bold;
+    }
+    #startstopbtn{
+        cursor:pointer;
+    }
+    #presets-container{
+        background-color:var(--violet);
+        width:100%;
+        border-radius:10px;
+        text-align: center;
+        padding:20px;
+    }
+    .preset{
+        cursor:pointer;
+        color:var(--lavender);
+    }
+{%endblock stylecontent%}
+{% block content %}
+
+<div class="userbox mx-auto">
+  <div class="text">
+Study Timer
+  </div>
+    <div id="timer">
+        <div id="time-left" class="bigtime">00:00</div>
+        <div class="bigtime" id="startstopbtn"><i class="fa-solid fa-circle-pause"></i></div>
+        <div id="presets-container">
+            <span id="5min" class="preset" onclick="handlePresetSet(300)">5 min</span>
+            <span id="10min" class="preset" onclick="handlePresetSet(600)">10 min</span>
+            <span id="15min" class="preset" onclick="handlePresetSet(900)">15 min</span>
+            <span id="25min" class="preset" onclick="handlePresetSet(1500)">25 min</span>
+            <span id="30min" class="preset" onclick="handlePresetSet(1800)">30 min</span>
+            <span id="45min" class="preset" onclick="handlePresetSet(2700)">45 min</span>
+            <span id="1hr" class="preset" onclick="handlePresetSet(3600)">1 hr</span>
+
+        </div>
+    </div>
+<br><br>
+</div>
+<script>
+  let timeLeft=document.getElementById("time-left")
+  let running=true;
+  function handletimer(seconds){ //handles countdown timer
+    // Set a fake timeout to get the highest timeout id
+    var highestTimeoutId = setTimeout(";");
+    for (var i = 0 ; i < highestTimeoutId ; i++) {
+      clearTimeout(i); 
+    }
+    console.log("in handle timer")
+    timeLeft.innerHTML=(Math.floor(seconds/60)).toString().padStart(2, '0')+":"+(Math.floor(seconds%60)).toString().padStart(2, '0');
+    console.log((Math.floor(seconds/60)).toString().padStart(2, '0'))
+    let secleft=seconds;
+    var stopwatch = setInterval(function(){
+      if (running){
+        secleft-=1;
+        if(secleft>0){
+        timeLeft.innerHTML=(Math.floor(secleft/60)).toString().padStart(2, '0')+":"+(Math.floor(secleft%60)).toString().padStart(2, '0');
+        }else{
+          timeLeft.innerHTML="0:00"
+          startstopbtn.innerHTML=`<i class="fa-solid fa-circle-play"></i>`
+          clearInterval(stopwatch);
+        }
+      }
+    }, 1000);
+  }
+
+  const url="{%url 'getTimestamp' %}"//gets current time state of stopwatches
+  const xhr= new XMLHttpRequest()
+  const responseType="json"
+  xhr.responseType=responseType
+  xhr.open("GET", url)
+      console.log(xhr)
+      console.log(xhr.status)
+  xhr.onload=function(){
+    console.log(xhr.status)
+    if (xhr.status==200){
+      console.log(xhr.response)
+      if (xhr.response["on"]==false){
+        running=false;
+        startstopbtn.innerHTML=`<i class="fa-solid fa-circle-play"></i>`
+        if(xhr.response["time"]==0){
+          timeLeft.innerHTML="0:00";
+        }else{
+          timeLeft.innerHTML=(Math.floor(xhr.response["time"]/60)).toString().padStart(2, '0')+":"+(Math.floor(xhr.response["time"]%60)).toString().padStart(2, '0');
+        }
+      }else{
+        running=true;
+        handletimer(Number(xhr.response["time"]))
+        startstopbtn.innerHTML=`<i class="fa-solid fa-circle-pause"></i>`
+      }
+    }
+  }
+  xhr.send()
+  var stringToHTML = function (str) {//string to form for formData
+    var parser = new DOMParser();
+      var doc = parser.parseFromString(str, 'text/html');
+      return doc.body.getElementsByTagName("form")[0];
+  };
+    let startstopbtn=document.getElementById("startstopbtn");
+    startstopbtn.addEventListener("click", function(event){//on pause-play button click
+        if (startstopbtn.innerHTML==`<i class="fa-solid fa-circle-pause"></i>`){//if playing, pause
+          if(timeLeft.innerHTML!=="0:00"){
+          running=false;
+          console.log('in if - stopping')
+          startstopbtn.innerHTML=`<i class="fa-solid fa-circle-play"></i>`
+          const url="{%url 'stopTimestamp' %}"
+          const xhr= new XMLHttpRequest()
+          const responseType="json"
+          xhr.responseType=responseType
+          xhr.open("GET", url)
+              console.log(xhr)
+              console.log(xhr.status)
+          xhr.onload=function(){
+            console.log(xhr.status)
+            if (xhr.status==200){
+              console.log(xhr.response)
+            }
+          }
+          xhr.send()
+        }
+        }else{//if paused, play
+          if(timeLeft.innerHTML!=="0:00"){
+          running=true;
+          console.log("in else -- starting")
+          startstopbtn.innerHTML=`<i class="fa-solid fa-circle-pause"></i>`
+          const url="{%url 'startTimestamp' %}"
+          const xhr= new XMLHttpRequest()
+          const responseType="json"
+          xhr.responseType=responseType
+          xhr.open("GET", url)
+              console.log(xhr)
+              console.log(xhr.status)
+          xhr.onload=function(){
+            console.log(xhr.status)
+            if (xhr.status==200){
+              handletimer(xhr.response['time'])
+              console.log(xhr.response)
+            }
+          }
+          xhr.send()
+        }
+        }
+    });
+    function handlePresetSet(time){//on preset set
+      const form=stringToHTML(`<form>{%csrf_token%}<input name="seconds" value=`+time+`></form>`)
+      console.log(form)
+      const formData=new FormData(form)
+      console.log(formData)
+      const url="{%url 'createTimestamp' %}"
+      const xhr= new XMLHttpRequest()
+      const responseType="json"
+      xhr.responseType=responseType
+      xhr.open("POST", url)
+          console.log(xhr)
+          console.log(xhr.status)
+      xhr.onload=function(){
+        console.log(xhr.status)
+        if (xhr.status===201){
+          startstopbtn.innerHTML=`<i class="fa-solid fa-circle-pause"></i>`
+            console.log(xhr.response)
+            running=true;
+            handletimer(time)
+          }else if(xhr.status===400){
+            alert("error")
+          }else if(xhr.status===500){
+              alert("error")
+          }
+  }
+      xhr.send(formData)
+
+    }
+</script>
+
+{% endblock content %}

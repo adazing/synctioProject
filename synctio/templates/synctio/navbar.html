@@ -1,0 +1,109 @@
+{% with request.resolver_match.view_name as view_name %}
+
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid">
+      <a class="navbar-brand"{% if request.user.is_authenticated %}href="{% url 'dashboard' %}" {%else%}href="/"{%endif%}>Synctio</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'aboutUs' %}">About</a>
+          </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Flashcards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'schedule' %}">Timer</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+              <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+              <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
+            </ul>
+          </li>
+          {%else%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+              <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+            </ul>
+          </li>
+          {%endif%}
+          {% if request.user.is_authenticated%}
+            {% if view_name != "schedule"%}
+          <li class="nav-item">
+            <a class="nav-link" id="time-left2" href="{% url 'schedule' %}">0:00</a>
+          </li>
+          {% endif%}
+          {%endif%}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% if request.user.is_authenticated%}
+  {% if view_name != "schedule"%}
+<script>
+  let timeLeft2=document.getElementById("time-left2")
+  let running2=true;
+  function handletimer(seconds){ //handles countdown timer
+    // Set a fake timeout to get the highest timeout id
+    var highestTimeoutId = setTimeout(";");
+    for (var i = 0 ; i < highestTimeoutId ; i++) {
+      clearTimeout(i); 
+    }
+    console.log("in handle timer")
+    timeLeft2.innerHTML=(Math.floor(seconds/60)).toString().padStart(2, '0')+":"+(Math.floor(seconds%60)).toString().padStart(2, '0');
+    console.log((Math.floor(seconds/60)).toString().padStart(2, '0'))
+    let secleft=seconds;
+    var stopwatch = setInterval(function(){
+      if (running2){
+        secleft-=1;
+        if(secleft>0){
+        timeLeft2.innerHTML=(Math.floor(secleft/60)).toString().padStart(2, '0')+":"+(Math.floor(secleft%60)).toString().padStart(2, '0');
+        }else{
+          timeLeft2.innerHTML="0:00"
+          clearInterval(stopwatch);
+        }
+      }
+    }, 1000);
+  }
+  const url2="{%url 'getTimestamp' %}"//gets current time state of stopwatches
+  const xhr2= new XMLHttpRequest()
+  const responseType2="json"
+  xhr2.responseType=responseType2
+  xhr2.open("GET", url2)
+      console.log(xhr2)
+      console.log(xhr2.status)
+  xhr2.onload=function(){
+    console.log(xhr2.status)
+    if (xhr2.status==200){
+      console.log(xhr2.response)
+      if (xhr2.response["on"]==false){
+        running2=false;
+        if(xhr2.response["time"]==0){
+          timeLeft2.innerHTML="0:00";
+        }else{
+          timeLeft2.innerHTML=(Math.floor(xhr2.response["time"]/60)).toString().padStart(2, '0')+":"+(Math.floor(xhr2.response["time"]%60)).toString().padStart(2, '0');
+        }
+      }else{
+        running2=true;
+        handletimer(Number(xhr2.response["time"]))
+      }
+    }
+  }
+  xhr2.send()
+</script>
+{%endif%}
+{%endif%}
+{% endwith %}

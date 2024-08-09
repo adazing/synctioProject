@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta chartset="utf-8">
+        <title>Synctio</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins">
+        <!--   <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+        <script src="main.js"></script> -->
+        {% block headercontent %}
+        {% endblock headercontent %}    </head>
+    <body>
+        <style>
+
+        :root{
+            --sapphire:#006E90;
+            --green:#1DA99D;
+            --violet:#855A82;
+            --lavender:#BAB5C7;
+            --black:#001011;
+        }
+        *{
+          sizing: border-box;
+        }
+          footer{
+            margin-top: 15vw;
+            color:black;
+            background-color:var(--sapphire);
+          }
+          footer a{
+            color: var(--green);
+          }
+          footer a:hover{
+            color: var(--lavender);
+          }
+        h1, h2, h3, h4, h5, h6, p, div, span{
+            color:var(--black);
+        }
+        .navbar-custom, .navbar-custom .dropdown-menu {
+            background-color: var(--sapphire);
+        }
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .dropdown-item:hover {
+            color: var(--green);
+        }
+        .navbar-custom .dropdown-item:hover{
+            background-color:var(--saphire) !important;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link,
+        .navbar-custom .dropdown-item
+        {
+            color: white;
+        }
+        body{
+          font-family: 'Poppins', Sans-Serif;
+          background-color:var(--lavender);
+          width:100vw;
+          overflow-x: hidden;
+          margin:none;
+          border: none;
+        }
+        {% block stylecontent %}
+
+        {% endblock stylecontent %}
+        </style>
+
+
+        {% include "navbar.html" %}
+        {% block content %}
+        {% endblock content %}
+        {% include "footer.html" %}
+    <script>
+        {% comment %} let activeUser=true;
+        function inactivityTime() {
+          var time;
+          // events
+          window.onload = resetTime;
+          window.onclick = resetTime;
+          window.onkeypress = resetTime;
+          window.ontouchstart = resetTime;
+          window.onmousemove = resetTime;
+          window.onmousedown = resetTime;
+          window.addEventListener('scroll', resetTime, true);
+  
+  
+          function inactiveUser(){
+            activeUser=false;
+          }
+          function resetTime() {
+            activeUser=true
+              clearTimeout(time);
+              time = setTimeout(inactiveUser, 1000 * 60); // 10 seconds
+          }
+  
+      };
+        setInterval(handleTimeUpdate, 60000);
+        function handleTimeUpdate(){
+            if (activeUser==true){
+            const xhr=new XMLHttpRequest();
+            const url="/update-time-page/"
+            xhr.open("GET", url)
+            xhr.onload=function(){
+              if (xhr.status===201){
+                console.log("updated")
+              }else if(xhr.status===400){
+                alert("error")
+              }
+              else if(xhr.status===500){
+                alert("ERROR")
+              }
+            }
+            xhr.send()
+          }
+        } {% endcomment %}
+        </script>
+    </body>
+</html>

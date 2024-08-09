@@ -1,0 +1,93 @@
+
+{% extends 'main.html' %}
+{% load static %}
+
+{% block stylecontent %}
+label{
+    color:var(--lavender);
+    width:30%;
+    box-sizing:border-box;
+
+}
+input, select{
+    background-color:var(--lavender);
+    border:none;
+    border-radius:5px;
+    padding:5px;
+    color:var(--violet);
+    width:50%;
+    box-sizing:border-box;
+}
+input:focus, select:focus{
+    outline:none;
+}
+input[type="radio"]{
+    height:20px;
+    accent-color:var(--violet);
+}
+.container{
+    background-color:var(--violet);
+    margin-top:10%;
+    border-radius:30px;
+    padding:5%;
+    width:90%;
+    box-sizing:border-box;
+}
+.formbtn{
+    background-color:var(--lavender);
+    color:var(--violet);
+    border:none;
+    outline:none;
+    padding:10px;
+    border-radius:10px;
+}
+img{
+    image-resolution: 1dpi;
+    width:30px;
+}
+{% endblock stylecontent %}
+
+{% block content%}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="container mx-auto">
+<p><label for "user-username">Username:</label><input id="user-username" type="text" value="{{username}}" readonly></p>
+{{form.as_p}}
+<p><a class="formbtn" href="{%url 'deleteTimeData'%}" id="user-time-data" type="button">Delete All Time Data</a></p>
+<p><a class="formbtn" href="{% url 'deleteFlashcardsData' %}" id="user-time-data" type="button">Delete All Flashcards Data</a></p>
+<p><a class="formbtn" href="{%url 'deleteUser'%}" id="user-time-data" type="button">Delete User</a></p>
+        <button class="formbtn" type="submit" name="Login">save</button>
+
+        </div>
+    </form>
+</div>
+<script>
+ //   form=document.getElementsByTagName("form")[0].getElementsByClassName("container mx-auto")[0]
+//    form.innerHTML=`<p><label for "user-username">Username:</label><input type="text" value="{{username}}" readonly></p>`+form.innerHTML
+    profilePic={
+        "1":"anne-lambeck-5VC4thmwMms-unsplash.jpg",
+        "2":"bill-stephan-9LkqymZFLrE-unsplash.jpg",
+        "3":"david-clode-pl5lewXXfHw-unsplash.jpg",
+        "4":"david-clode-Ws6Tb1cI0co-unsplash.jpg",
+        "5":"luke-stackpoole-RxHhxWnXmNs-unsplash.jpg",
+        "6":"raoul-droog-yMSecCHsIBc-unsplash.jpg",
+        "7":"ricky-kharawala-adK3Vu70DEQ-unsplash.jpg",
+        "8":"satyabratasm-u_kMWN-BWyU-unsplash.jpg",
+        "9":"selin-sahin-5DB3cYe7Nxk-unsplash.jpg",
+        "10":"todd-cravens-lwACYK8ScmA-unsplash.jpg",
+        "11":"valkyrie-pierce-_kKlxpLdoZQ-unsplash.jpg",
+        "12":"zhengtao-tang-V7SKRhXskv8-unsplash.jpg",
+    }
+    profilePicDiv=document.getElementById("user-profile")
+    console.log(profilePicDiv)
+    console.log(profilePicDiv.getElementsByTagName("div").length)
+    for (let x=0; x<profilePicDiv.getElementsByTagName("div").length; x++){
+        label=profilePicDiv.getElementsByTagName("div")[x].getElementsByTagName("label")[0]
+        input=label.getElementsByTagName("input")[0]
+        link="{% static 'synctio/images/noSnake.jpeg' %}".replace("noSnake.jpeg", profilePic[String(Number(label.innerHTML.replace(input.outerHTML, "")))])
+        label.innerHTML=input.outerHTML+`<img src=`+link+`>`
+    }
+    
+</script>
+{% endblock content %}

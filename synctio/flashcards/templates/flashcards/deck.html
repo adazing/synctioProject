@@ -1,0 +1,275 @@
+{% extends "main.html" %}
+{% block headercontent %}
+<script
+  src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
+  integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA="
+  crossorigin="anonymous"></script>
+
+
+
+{% endblock headercontent %}
+{% block stylecontent %}
+    .flashcard{
+        padding:10px;
+        margin:10px;
+    }
+    #navbuttons{
+      display: table;
+      margin:auto;
+      padding:10%;
+    }
+    #deckform{
+      padding-top:5%;
+    }
+    .hoverinput{
+      display:block;
+      box-sizing:border-box;
+      padding:5px;
+      width:100%;
+      border:none;
+      margin:10px;
+      border-radius:5px;
+    }
+    .hoverinput:hover{
+      outline:3px solid lightgrey;
+
+    }
+    .hoverinput:focus{
+      outline:3px solid grey;
+    }
+    #deckname{
+      font-size: 1.5rem;
+    }
+    #deckdescription{
+      color:grey;
+    }
+    .container{
+      background-color:var(--violet);
+      margin-top:10%;
+      border-radius:30px;
+      margin:auto;
+      margin-top:5%;
+      padding:5%;
+      width:90%;
+      box-sizing:border-box;
+  }
+{% endblock stylecontent %}
+{% block content %}
+<div class="container">
+<div id="deck_wrapper">
+  <form id="deckform" class="col-md-9 mx-auto col-10" method="POST" action="/deck-json-update/{{pk}}/">
+    {%csrf_token%}
+    <input id="deckname" class="hoverinput" type="text" value="deck name" name="name">
+    <input id="deckdescription" class="hoverinput" type="text" value="deck description" name="description">
+    <select id="deckfolder" class="hoverinput" type="text" name="folder">
+      {% for f in folderList%}
+        <option value="{{f.id}}">{{f.name}}</option>
+      {% endfor %}
+    </select>
+    <input id="deckuser" type="text" value="{{user}}" name="user" hidden>
+    <button id="deckSubmit" type="submit" hidden>Submit</button>
+  </form>
+</div>
+<hr>
+<div id="navbuttons" class="my-auto btn-group btn-group-lg" role="group" aria-label="NavButtons">
+  <a href="{% url 'flashcardplay' pk %}" type="button" class="btn btn-primary">Cards</a>
+  <a href="{% url 'flashcardwriteapi' pk %}" type="button" class="btn btn-primary">Text</a>
+</div>
+
+<hr>
+
+<form id="flashcard_form" class="form col-md-9 mx-auto col-10" method="POST" action="{% url 'flashcardCreateView' %}">
+</form>
+<div id="flashcards_wrapper" class="grid gap-3">
+</div>
+<input type="hidden" value="/" name="next"/>
+</div>
+<script type="text/javascript">
+const flashcards_wrapper=document.getElementById("flashcards_wrapper")
+const deck_wrapper=document.getElementById("deck_wrapper")
+const flashcard_form=document.getElementById("flashcard_form")
+function format(obj){
+  if (obj.answer==null){
+    obj.answer=""
+  }
+  return `<div id="flashcardobj-`+obj.id+`" class="card flashcard col-md-6 mx-auto col-10"><div class="card-body"><input id="inputkey-`+obj.id+`" onchange='handleFlashcardEdit(`+JSON.stringify(obj).replace('"',"&quot;")+`)' type="text" class="flashcard_key hoverinput" value="`+obj.key.replace('"',"&quot;")+`"><input id="inputanswer-`+obj.id+`"type="text" onchange='handleFlashcardEdit(`+JSON.stringify(obj).replace('"',"&quot;")+`)' class="flashcard_description hoverinput" value="`+obj.answer.replace('"',"&quot;")+`"><br><button type="button" class="btn btn-warning" onclick="handleDelete(`+obj.id+`)">Delete</button></div></div>`
+}
+var stringToHTML = function (str) {
+	var parser = new DOMParser();
+    var doc = parser.parseFromString(str, 'text/html');
+    return doc.body.getElementsByTagName("form")[0];
+};
+function handleFlashcardEdit(obj){
+//  obj=JSON.parse(obj)
+  let objkey=document.getElementById("inputkey-"+obj.id)
+  let objanswer=document.getElementById("inputanswer-"+obj.id)
+  const form=stringToHTML(`<form>{%csrf_token%}<input name="deck" value={{pk}}></input><input name="key" value="`+objkey.value+`"><input name="answer" value="`+objanswer.value+`"></form>`)
+  console.log(form)
+  const formData=new FormData(form)
+  const url="/update-json-flashcard/"+obj.id+"/"
+  const xhr= new XMLHttpRequest()
+  const responseType="json"
+  xhr.responseType=responseType
+  xhr.open("POST", url)
+  xhr.onload=function(){
+
+  }
+  xhr.send(formData)
+
+}
+
+function handleFlashcardFormDidSubmit(event){
+    event.preventDefault()
+    const form=event.target
+    const formData=new FormData(form)
+    const url = form.getAttribute("action")
+    const method= form.getAttribute("method")
+    const xhr = new XMLHttpRequest()
+    const responseType="json"
+    xhr.responseType=responseType
+    xhr.open(method, url)
+    xhr.setRequestHeader("x-Requested-With", "XMLHttpRequest")
+    xhr.onload=function(){
+        if (xhr.status===201){
+        const newFlashcard = xhr.response
+        flashcards_wrapper.innerHTML=format(newFlashcard)+flashcards_wrapper.innerHTML;
+      }else if(xhr.status===400){
+            flashcard_form.outerHTML="";
+            flashcards_wrapper.outerHTML="";
+            deck_wrapper.innerHTML="ERROR";
+        }else if(xhr.status===500){
+            flashcard_form.outerHTML="";
+            flashcards_wrapper.outerHTML="";
+            deck_wrapper.innerHTML="ERROR";
+            alert("There was a server error, please try again.")
+        }
+    }
+    xhr.onerror=function(){
+        alert("An error occured. Please try again later.")
+    }
+    xhr.send(formData)
+}
+flashcard_form.addEventListener("submit", handleFlashcardFormDidSubmit)
+function handleDelete(id){
+  console.log(id)
+  xhr=new XMLHttpRequest();
+  const url="/delete-json-flashcard/"+id+'/'
+  xhr.open("GET", url)
+  xhr.onload=function(){
+    if (xhr.status===201){
+      document.getElementById("flashcardobj-"+id).outerHTML=""
+    }else if(xhr.status===400){
+      alert("error")
+    }
+    else if(xhr.status===500){
+      alert("ERROR")
+    }
+  }
+  xhr.send()
+}
+
+
+
+
+function loadDeck(deckform){
+ // flashcards_wrapper.innerHTML="Loading..."
+  const xhr=new XMLHttpRequest()
+  const method="GET"
+  const url="/deck-detail/{{pk}}/"
+  const responseType="json"
+  xhr.responseType=responseType
+  xhr.open(method, url)
+  xhr.onload=function(){
+    var deck=xhr.response
+    console.log(deck)
+    document.getElementById("deckname").value=deck.name.replace('"', "&quot;")
+    document.getElementById("deckdescription").value=deck.description.replace('"', "&quot;")
+    document.getElementById("deckfolder").value=deck.folder
+    console.log(deck.folder);
+//    document.getElementById("deckform").addEventListener("submit", handleDeckFormDidSubmit)
+document.getElementById("deckdescription").addEventListener("change", function(event){
+  let deckform=document.getElementById("deckform")
+  event.preventDefault();
+  console.log(deckform)
+  handleDeckFormDidSubmit(deckform)
+})
+document.getElementById("deckname").addEventListener("change", function(event){
+      let deckform=document.getElementById("deckform")
+      event.preventDefault();
+      console.log(deckform)
+      handleDeckFormDidSubmit(deckform)
+    })
+    document.getElementById("deckfolder").addEventListener("change", function(event){
+      let deckform=document.getElementById("deckform")
+      event.preventDefault();
+      console.log(deckform)
+      handleDeckFormDidSubmit(deckform)
+    })
+  }
+  xhr.send()
+}
+//let deckform=document.getElementById("deckform")
+loadDeck(deckform)
+function handleDeckFormDidSubmit(deckform){
+ // event.preventDefault()
+  const form=deckform
+  console.log(form)
+  const formData=new FormData(form)
+  const url = form.getAttribute("action")
+  const method= form.getAttribute("method")
+  const xhr = new XMLHttpRequest()
+  const responseType="json"
+  xhr.responseType=responseType
+  xhr.open(method, url)
+  xhr.setRequestHeader("x-Requested-With", "XMLHttpRequest")
+  xhr.onload=function(){
+    console.log("deckload")
+      if (xhr.status===201){
+        console.log(xhr.response)
+    }else if(xhr.status===400){
+//          flashcard_form.outerHTML="";
+//          flashcards_wrapper.outerHTML="";
+//          deck_wrapper.innerHTML="ERROR";
+      }else if(xhr.status===500){
+//          flashcard_form.outerHTML="";
+//          flashcards_wrapper.outerHTML="";
+//          deck_wrapper.innerHTML="ERROR";
+//          alert("There was a server error, please try again.")
+      }
+  }
+  xhr.onerror=function(){
+      alert("An error occured. Please try again later.")
+  }
+  xhr.send(formData)
+}
+
+
+function loadFlashcards(flashcards_wrapper, deck_wrapper, flashcard_form){
+  //  deck_wrapper.innerHTML='Loading...'
+  //  flashcards_wrapper.innerHTML="Loading..."
+    const xhr=new XMLHttpRequest()
+    const method="GET"
+    const url="/flashcard-list/{{pk}}/"
+    const responseType="json"
+    xhr.responseType=responseType
+    xhr.open(method, url)
+    xhr.onload=function(){
+      var listedItems=xhr.response["flashcards"]
+      console.log(xhr.response)
+      flashcard_form.innerHTML=`
+      {% csrf_token%}
+    <input required="required" class="hoverinput" name="key" placeholder="prompt">
+    <input class="hoverinput" name="answer" placeholder="answer">
+    <input name="deck" type="hidden" value="{{pk}}">
+    <button type="submit" class="btn btn-primary">Add</button><hr>`
+      for(var i=0; i<listedItems.length; i++){
+        let flashcardObj=listedItems[i]
+        flashcards_wrapper.innerHTML+=format(flashcardObj)
+      }
+    }
+    xhr.send()
+}
+loadFlashcards(flashcards_wrapper, deck_wrapper, flashcard_form)
+
+</script>
+{% endblock content %}

@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+{%block stylecontent%}
+.infoperson{
+    background-color:var(--violet);
+    border-radius:20px;
+    padding:10%;
+    color:white;
+    font-size: 20px;
+    margin: auto;
+}
+.iconPic{
+    font-size: 100px;
+}
+.info{
+    margin:20px;
+}
+{%endblock stylecontent%}
+{%block content%}
+<div class="info">
+<h1>Who We Are</h1>
+<div class="container">
+    <div class="row g-2">
+      <div class="col-6">
+        <div class="p-3 infoperson"><div class="iconPic">💻</div> Ada Langford<br>Programmer</div>
+      </div>
+      <div class="col-6">
+        <div class="p-3 infoperson"><div class="iconPic">✍️</div> Haley Zhang<br>Script Writer and Coordinator</div>
+      </div>
+      <div class="col-6">
+        <div class="p-3 infoperson"><div class="iconPic">🔍</div> Rachel Rakower<br>Researcher, Idea-Generator, and Drawer!</div>
+      </div>
+      <div class="col-6">
+        <div class="p-3 infoperson"><div class="iconPic">📱</div> Sophia Lin<br>Interface Designer</div>
+      </div>
+    </div>
+  </div>
+  <br>
+    <h1>Our Story</h1>
+    <h4>It all started with an idea for an <a href="https://www.congressionalappchallenge.us/">app competition</a>. Then we realized it was time to put it on the web.</h4>
+    <h1>Our Mission</h1>
+    <h4>To help students succeed.</h4>
+</div>
+
+{%endblock content%}

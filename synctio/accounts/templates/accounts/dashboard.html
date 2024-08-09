@@ -1,0 +1,166 @@
+{% extends 'main.html' %}
+{% load static %}
+{%block headercontent%}
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      function getdayofweek(day){
+          if (day==0){
+            return "Sun"
+          }
+          else if (day==1){
+            return "Mon"
+          }
+          else if (day==2){
+            return "Tue"
+          }
+          else if (day==3){
+            return "Wed"
+          }
+          else if (day==4){
+            return "Thurs"
+          }
+          else if (day==5){
+            return "Fri"
+          }
+          else{
+            return "Sat"
+          }
+        }
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawChart);
+//create trigger to resizeEnd event     
+        $(window).resize(function() {
+            if(this.resizeTO) clearTimeout(this.resizeTO);
+            this.resizeTO = setTimeout(function() {
+            $(this).trigger('resizeEnd');
+            }, 500);
+        });
+        //redraw graph when window resize is completed  
+        $(window).on('resizeEnd', function() {
+            drawChart();
+        });
+        const d=new Date();
+
+        function drawChart() {
+          var data = google.visualization.arrayToDataTable([
+            ['Day', 'Goal', 'Actual'],
+            [getdayofweek((new Date(Date.now()-864e5*4)).getDay()), {{goal}}, {{day5}}],
+            [getdayofweek((new Date(Date.now()-864e5*3)).getDay()), {{goal}}, {{day4}}],
+            [getdayofweek((new Date(Date.now()-864e5*2)).getDay()), {{goal}}, {{day3}}],
+            [getdayofweek((new Date(Date.now()-864e5*1)).getDay()), {{goal}}, {{day2}}],
+            [getdayofweek((new Date(Date.now())).getDay()), {{goal}}, {{day1}}],
+          ]);
+          console.log(d.getDay()-1)
+          var options = {
+            backgroundColor:'#ffffff',
+            chart: {
+              title: 'Goals vs Actual',
+              subtitle: '(minutes)',
+            }
+          };
+  
+          var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+  
+          chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+    </script>
+{%endblock headercontent%}
+{%block stylecontent%}
+    .text{
+      padding-bottom:50px;
+      text-align:center;
+      color:white;
+      font-size:3vh;
+    }
+    #progress{
+      justify-content:center;
+      display:flex;
+      flex-direction:column;      
+    }
+    .userbox{
+        background-color:var(--violet);
+        color:white;
+        border-radius:30px;
+        width:80vw;
+        padding:30px;
+        margin-top:20px;
+    }
+    #userdiv{
+      min-height:20vh;
+      position:relative;
+    }
+    #columnchart_material{
+      sizing:border-box;
+      border-radius:10px;
+      width:70vw;
+      border:20px solid #ffffff;
+      height:50vh;
+      background-color:white;
+    }
+    #profile-img-container{
+      height:100px;
+      width:100px;
+      border:5px solid grey;
+      border-radius:100%;
+      overflow:hidden;
+      float:left;
+    }
+    #profile-img{
+      height:100%;
+      width:100%;
+      object-fit:cover;
+    }
+    .username{
+      font-size:3vh;
+      color:white;
+      margin-top:auto;
+    }
+    .floatright{
+      vertical-align: middle;
+
+      position:absolute;
+      color:white;
+      right:10%;
+    }
+{%endblock stylecontent%}
+{% block content %}
+
+<div class="userbox mx-auto">
+  <div class="text">
+Todays Progress:
+  </div>
+  <div id="columnchart_material" class="mx-auto"></div>
+<br><br>
+</div>
+<div id="userdiv" class="userbox mx-auto">
+  <div id="profile-img-container">
+  <img id="profile-img" src="{% static 'synctio/images/anne-lambeck-5VC4thmwMms-unsplash.jpg'%}">
+  </div>
+  <div class="username">{{user}}</div>
+  <a class="floatright" href={% url 'userOptions' %}>Preferences</a>
+</div>
+<script>
+  profilePic={
+    "1":"anne-lambeck-5VC4thmwMms-unsplash.jpg",
+    "2":"bill-stephan-9LkqymZFLrE-unsplash.jpg",
+    "3":"david-clode-pl5lewXXfHw-unsplash.jpg",
+    "4":"david-clode-Ws6Tb1cI0co-unsplash.jpg",
+    "5":"luke-stackpoole-RxHhxWnXmNs-unsplash.jpg",
+    "6":"raoul-droog-yMSecCHsIBc-unsplash.jpg",
+    "7":"ricky-kharawala-adK3Vu70DEQ-unsplash.jpg",
+    "8":"satyabratasm-u_kMWN-BWyU-unsplash.jpg",
+    "9":"selin-sahin-5DB3cYe7Nxk-unsplash.jpg",
+    "10":"todd-cravens-lwACYK8ScmA-unsplash.jpg",
+    "11":"valkyrie-pierce-_kKlxpLdoZQ-unsplash.jpg",
+    "12":"zhengtao-tang-V7SKRhXskv8-unsplash.jpg",
+}
+profileImg=document.getElementById("profile-img")
+profileImg.outerHTML=profileImg.outerHTML.replace("anne-lambeck-5VC4thmwMms-unsplash.jpg", profilePic[{{profilePicture}}])
+console.log(profilePic[{{profilePicture}}])
+console.log("pic")
+console.log({{profilePicture}})
+</script>
+
+{% endblock content %}

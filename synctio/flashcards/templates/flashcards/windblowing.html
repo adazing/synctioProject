@@ -1,0 +1,166 @@
+{% extends 'main.html'%}
+{% block stylecontent %}
+#background{
+    height:100vh;
+    width:100vw;
+    background-color:#001011;
+    position:relative;
+}
+.bubble{
+    font-size:20px;
+    border-radius:20px;
+    cursor:pointer;
+    padding:10px;
+    left:-20%;
+    position:absolute;
+    animation-name: bubbleMove;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    transition: 0.3s;
+    visibility:visible;
+}
+
+@keyframes bubbleMove {
+    to{left:100%;}
+}
+#question{
+    left:30%;
+    top:0%;
+    position:absolute;
+    color:var(--violet);
+    font-size:25px;
+}
+#response{
+    left:30%;
+    top:5%;
+    position:absolute;
+    color:var(--violet);
+    font-size:25px;
+}
+.x1{
+    top:10%;
+    animation-delay:1s;
+}
+.x2{
+    top:20%;
+    animation-delay:2s;
+}
+.x3{
+    top:30%;
+    animation-delay: 0s;
+}
+.x4{
+    top:40%;
+}
+.x5{
+    top:50%;
+}
+.x6{
+    top:60%;
+}
+.x7{
+    top:70%;
+}
+.x8{
+    top:80%;
+}
+.x9{
+    top:90%;
+}
+
+.answer{
+    background-color:#1DA99D;
+    color:#001011;
+    border:5px solid #006E90;
+}
+.delete{
+    background-color:#BAB5C7;
+    color:#001011;
+    border:5px solid #855A82;
+}
+{% endblock stylecontent %}
+{% block content %}
+deck: {{deck}}
+<div id="background">
+<div id="question">Spell Blue</div>
+<div id="response">Your answer</div>
+
+<div class="bubble delete">X</div>
+<div class="bubble delete">XX</div>
+<div class="bubble x1 answer">a</div>
+<div class="bubble x2 answer">b</div>
+<div class="bubble x3 answer">c</div>
+<div class="bubble x4 answer">d</div>
+<div class="bubble x5 answer">e</div>
+<div class="bubble x6 answer">f</div>
+<div class="bubble x7 answer">g</div>
+<div class="bubble x8 answer">h</div>
+<div class="bubble x9 answer">i</div>
+</div>
+<script>
+let bubbles=document.getElementsByClassName("bubble")
+let response=document.getElementById("response")
+for (let x=0;x<bubbles.length; x++){
+    if (bubbles[x].innerHTML=="X"){
+    bubbles[x].addEventListener("mouseover", function(event){
+        bubbles[x].style.visibility="hidden";
+        bubbles[x].style.left="-20%";
+        response.innerHTML=response.innerHTML.substring(0, 5)
+    })
+    }else if (bubbles[x].innerHTML=="XX"){
+        bubbles[x].addEventListener("mouseover", function(event){
+            bubbles[x].style.visibility="hidden";
+            bubbles[x].style.left="-20%";
+            response.innerHTML=""
+        })
+    }else{
+        bubbles[x].addEventListener("mouseover", function(event){
+            bubbles[x].style.visibility="hidden";
+            bubbles[x].style.left="-20%";
+            response.innerHTML+=bubbles[x].innerHTML
+        })
+    }
+}
+setInterval(bubbleHoverCheck, 500)
+function delete1(){
+    response.innerHTML=response.innerHTML.substring(0, 4)
+}
+function clear(){
+    response.innerHTML=""
+}
+function add(answer){
+    response.innerHTML+=answer;
+}
+function bubbleHoverCheck(){
+for (let x=0;x<bubbles.length; x++){
+    {% comment %} if (bubbles[x].matches(':hover')){
+        bubbles[x].style.visibility="hidden";
+        bubbles[x].style.left="-20%";
+        console.log("style.left is"+bubbles[x].style.visibility)
+        response.innerHTML+=bubbles[x].innerHTML
+        console.log(response.innerHTML)
+    } {% endcomment %}
+    if (Number(getComputedStyle(bubbles[x]).getPropertyValue("left").replace("px", ""))<0){
+        if (bubbles[x].innerHTML=="X" || bubbles[x].innerHTML=="XX"){
+        bubbles[x].style.top=String(Math.floor(Math.random()*10)*9+10)+"%"
+        }
+        //bubbles[x].style.left="-"+String(Math.floor(Math.random()*10)*10+20)+"%"
+        console.log(bubbles[x].style.left)
+        bubbles[x].style.visibility="visible";
+    }
+}
+}
+
+{% comment %} setInterval(createBubble, 2000);
+function createBubble(){
+    var bubble = document.createElement("div")
+    bubble.innerHTML = "answer"
+    bubble.classList.add("bubble")
+    bubble.style.top=String(Math.floor(Math.random() * 10)*10)+"%"
+    document.getElementsByClassName("background")[0].append(bubble)
+} {% endcomment %}
+
+
+</script>
+{% endblock content %}

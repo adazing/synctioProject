@@ -1,0 +1,273 @@
+
+{% extends 'main.html' %}
+{%block headercontent%}
+
+{%endblock headercontent%}
+{% block stylecontent%}
+#flashcard.benddown{
+  animation: 0.5s ease-in-out benddown;
+}
+#flashcard.crazy{
+  animation: 0.5s ease-in-out crazy;
+}
+#flashcard.fall{
+  animation: 0.5s ease-in-out fall;
+}
+#flashcard.shake{
+  animation: 0.5s ease-in-out shake;
+}
+#flashcard.bendup{
+  animation: 0.5s ease-in-out bendup;
+}
+@keyframes crazy{
+  0%{
+    transform: translate(-50%, -50%);
+  }
+  20%{
+    transform: rotate(-0.3turn) translate(-50%, -50%);
+  }
+  40%{
+    transform: rotate(-0.2turn) translate(-50%, -50%);
+  }
+  60%{
+    transform: rotate(0.5turn) translate(-50%, 200%);
+  }
+  100%{
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes fall{
+  0%{
+    transform: translate(-50%, -50%);
+  }
+  30%{
+    transform: translate(-100%, -100%);
+  }
+  70%{
+    transform: translate(100%, -70%);
+  }
+  100%{
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes shake {
+  0%{
+    transform: translate(-50%, -50%);
+  }
+  30%{
+    transform: translate(-100%, -50%);
+  }
+  70%{
+    transform: translate(0%, -50%);
+  }
+  100%{
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes bendup {
+  0%{
+    transform: translate(-50%, -50%);
+  }
+  50%{
+    transform: rotate(0.11turn) translate(-100%, -50%);
+  }
+  100%{
+    transform: rotate(0.0turn) translate(-50%, -50%);
+  }
+}
+@keyframes benddown {
+  0%{
+    transform: translate(-50%, -50%);
+  }
+  50%{
+    transform: rotate(-0.11turn) translate(-100%, -50%);
+  }
+  100%{
+    transform: rotate(0.0turn) translate(-50%, -50%);
+  }
+}
+#flashcard{
+    height:50vh;
+    width:50vw;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    perspective: 1000px;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+#flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+#flashcard.rotated #flashcard-inner {
+  -webkit-transform : rotateY(180deg); 
+  -moz-transform : rotateY(180deg);
+  -ms-transform : rotateY(180deg);
+  -o-transform : rotateY(180deg);
+  transform : rotateY(180deg);
+}
+#flashcard-front, #flashcard-back {
+  padding:30px;
+  background-color: white;
+  cursor: pointer;
+  border-radius:10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+#flashcard-front {
+  color: black;
+}
+#flashcard-back {
+  transform: rotateY(180deg);
+}
+#knowbtn{
+    text-align:center;
+}
+#reviewbtn{
+    text-align:center;
+}
+#reflectbtns{
+    transform: translate(0, 70vh);
+}
+.flashcard-container{
+  min-height: 70vh;
+  width: 100vw;
+}
+{%endblock stylecontent%}
+{% block content %}
+<div>deck: {{deck.name}}</div>
+<div class="flashcard-container">
+<div id="flashcard">
+  <div id="flashcard-inner">
+    <div id="flashcard-front">
+      {{flashcard.key}}
+    </div>
+    <div id="flashcard-back">
+      {{flashcard.answer}}
+    </div>
+  </div>
+</div>
+<div class="container text-center" id="reflectbtns">
+    <div class="row align-items-start">
+      <div class="col">
+<button id="knowbtn" type="button" class="btn btn-success btn-lg" onclick="handleFlashcardReview('1')">I know this!</button>
+      </div>
+      <div class="col">
+<button id="reviewbtn" type="button" class="btn btn-warning btn-lg" onclick="handleFlashcardReview('0')">Review Later</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  let effects=["crazy", "fall", "shake", "bendup", "benddown"]
+  document.getElementById("flashcard").addEventListener("animationend", function(e){
+    document.getElementById("flashcard").className=""
+  });
+  document.getElementById("flashcard").addEventListener("click", function(e){
+    document.getElementById("flashcard").classList.toggle('rotated');
+  });
+  let flashcardidval={{flashcard.id}}
+  var stringToHTML = function (str) {
+    var parser = new DOMParser();
+      var doc = parser.parseFromString(str, 'text/html');
+      return doc.body.getElementsByTagName("form")[0];
+  };
+  function handleFlashcardReview(review){
+    //  obj=JSON.parse(obj)
+      const form=stringToHTML(`<form>{%csrf_token%}<input name="flashcard" value=`+flashcardidval+`><input name="review" value="`+review+`"></form>`)
+      console.log(form)
+      const formData=new FormData(form)
+      const url="{%url 'flashcardProcessor' %}"
+      const xhr= new XMLHttpRequest()
+      const responseType="json"
+      xhr.responseType=responseType
+      xhr.open("POST", url)
+      xhr.onload=function(){
+        console.log(xhr.status)
+        if (xhr.status===200){
+          flashcard=document.getElementById("flashcard")
+          flashcard.classList.toggle(effects[Math.floor(Math.random()*effects.length)])
+          flashcardFront=document.getElementById("flashcard-front")
+          flashcardBack=document.getElementById("flashcard-back")
+          console.log(xhr.response)
+          const newFlashcard = xhr.response
+          flashcardFront.innerHTML=newFlashcard.key;
+          flashcardBack.innerHTML=newFlashcard.answer;
+          adjustFontSize(flashcardFront);
+          adjustFontSize(flashcardBack);
+          flashcardidval=newFlashcard.id;
+        }else if(xhr.status===400){
+            alert("error")
+          }else if(xhr.status===500){
+              alert("error")
+          }
+      }
+      xhr.send(formData)
+    
+    }
+    const delay = 500;
+    const div=document.getElementById("flashcard-front")
+    const div2=document.getElementById("flashcard-back")
+
+    function checkOverflow(el) {
+        let curOverflow = el.style.overflow;
+        if(el.innerHTML.length==0){
+            return true
+        }
+        if (!curOverflow || curOverflow === "visible") {
+          el.style.overflow = "hidden";
+        }
+        let isOverflowing =
+          el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight;
+        el.style.overflow = curOverflow;
+        return isOverflowing;
+      }
+      const incrementionRate = 0.1 // To augment 0.05em in every iteration
+      function adjustFontSize(el) {
+        el.style.fontSize = "0.1em"
+        lastSize=0.1
+            let fitted = false
+         //   let lastSize=0.1
+        
+            while (!fitted) {
+                if (checkOverflow(el)) {
+                    el.style.fontSize = `${lastSize - incrementionRate}em`
+                    fitted = true
+                } else {
+                    lastSize = parseFloat(lastSize + incrementionRate)
+                    el.style.fontSize = `${lastSize}em`
+                }
+            }
+        
+        }
+        function throttle(callback, limit) {
+            let wait = false;
+            return function () {
+              if (!wait) {
+                callback.apply(null, arguments);
+                wait = true;
+                setTimeout(function () {
+                  wait = false;
+                }, limit);
+              }
+            };
+          }
+          
+          window.addEventListener("resize", () => {
+            throttle(adjustFontSize(div), delay);
+            throttle(adjustFontSize(div2), delay);
+          });
+        adjustFontSize(div)
+        adjustFontSize(div2)
+</script>
+{% endblock content %}

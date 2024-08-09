@@ -1,0 +1,265 @@
+{% extends 'main.html' %}
+{% block content %}
+<style>
+    .home-container{
+        display:grid;
+        grid-template-columns: 1fr 3fr;
+        background-color:var(--violet);
+        margin-top:10%;
+        border-radius:30px;
+        padding:5%;
+        width:90%;
+        box-sizing:border-box;
+
+    }
+    details>summary::-webkit-details-marker{
+        display:none;
+    }
+    details > summary {
+        list-style:none;
+        cursor:pointer;
+        padding: 4px;
+        width: 200px;
+        background-color: var(--violet);
+        border: none;
+        box-shadow: 1px 1px 2px black;
+        cursor: pointer;
+    }
+    summary:focus {
+	    background-color:var(--lavender);
+    }
+    details > summary{
+        background-color: var(--lavender);
+        padding: 4px;
+        margin: 0;
+        box-shadow: 1px 1px 2px #bbbbbb;
+    }
+    .container{
+        background-color:var(--violet);
+        margin-top:10%;
+        border-radius:30px;
+        padding:5%;
+        width:90%;
+        box-sizing:border-box;
+    }
+    a{
+        color:black;
+        text-decoration:none;
+        transition: 0.1s linear;
+    }
+    a:hover{
+        color:var(--violet);
+
+    }
+    #createDeckBtn{
+        background-color:var(--lavender);
+        color:var(--violet);
+        position:relative;
+        width:10%;
+        border-radius:10px;
+        display: inline-block;
+        text-align: center;
+        font-weight: bold;
+        font-size:40px;
+        height:auto;
+        float:right;
+    }
+    #searchBar{
+        width:50%;
+        padding:1vmin;
+        margin: 10px;
+        border:none;
+        outline:none;
+        border-radius:10px;
+        background-color:var(--lavender);
+        color:var(--violet);
+    }
+    #searchForm{
+        display: inline;
+    }
+    #searchBar:focus{
+        outline:none;
+        border:none;
+    }
+    .deckDiv{
+        background-color:var(--lavender);
+        margin-top:10%;
+        border-radius:30px;
+        padding:5%;
+        width:90%;
+        box-sizing:border-box;
+    }
+    #createFolderBtn{
+        background-color:var(--lavender);
+        color:var(--violet);
+        position:relative;
+        width:20%;
+        border-radius:10px;
+        display: inline-block;
+        text-align: center;
+        font-weight: bold;
+        font-size:40px;
+        height:auto;
+    }
+    .deleteBtn{
+        color:grey;
+        float:right;
+    }
+    .deleteBtn:hover{
+        color:black;
+    }
+</style>
+<!-- Button trigger modal -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="createModalHeader">Create Deck</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form class="modal-body" id="createModalContent">
+
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="submitBtn" data-bs-dismiss="modal">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="home-container mx-auto">
+    <div>
+        <a id="createFolderBtn" data-bs-toggle="modal" data-bs-target="#createModal">+</a>
+        <br><br>
+        <details id='folder-all'><summary><a href="{% url 'home' %}">All</a></summary></details>
+        <div id="userfolders">
+        {{foldersHTML | safe}}
+        </div>
+    </div>
+    <div>
+        <hr>
+        <form method="GET" action="{% url 'home' %}" id="searchForm">
+    <input id="searchBar" type="text" name="q" placeholder="search">
+</form>
+    <a id="createDeckBtn" href="" data-bs-toggle="modal" data-bs-target="#createModal">+</a>
+    <h5>{{decks_count}} decks</h5>
+    {% for i in decks %}
+        <div class="deckDiv">
+            <small>@{{i.user.username}}</small>
+            <a class="deleteBtn" href="{% url 'deleteDeck' i.id %}"><i class="fa-solid fa-trash"></i></a>
+            <h5>{{ i.id }} -- <a href="{% url 'deck' i.id %}">{{i.name}}</a></h5>
+            <small>{{i.folder.name}}</small>
+        </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+<script>
+    let isdeckform=true;
+    let submitBtn=document.getElementById("submitBtn");
+    let modalHeader=document.getElementById("createModalHeader");
+    let modalContent=document.getElementById("createModalContent");
+    let createDeckBtn=document.getElementById("createDeckBtn");
+    let createFolderBtn=document.getElementById("createFolderBtn");
+    createDeckBtn.addEventListener("click", handleDeckCreateOpen)
+    createFolderBtn.addEventListener("click", handleFolderCreateOpen)
+    submitBtn.addEventListener("click", handleCreateFormSend)
+    function handleCreateFormSend(){
+        console.log("submitting!")
+        let modalContent2=document.getElementById("createModalContent")
+        const form=modalContent2
+   //       console.log(form)
+   console.log(modalContent2)
+          const formData=new FormData(form)
+          console.log(formData)
+          let urltemp=""
+          urltemp="{%url 'folderCreateEmpty' %}"
+          if (isdeckform==true){
+            urltemp="{%url 'deckCreateEmpty' %}"
+          }
+          const url=urltemp
+          const xhr= new XMLHttpRequest()
+          const responseType="json"
+          xhr.responseType=responseType
+          xhr.open("POST", url)
+          xhr.onload=function(){
+            console.log(xhr.status)
+            console.log("{%url 'folderCreateEmpty' %}")
+            if (xhr.status===201){
+                console.log(xhr.response)
+                if (isdeckform==true){
+                    console.log("{% url 'deck' 1 %}".replace("1", (xhr.response.deckid).toString()))
+                    location.href="{% url 'deck' 1 %}".replace("1", (xhr.response.deckid).toString());
+                  }else{
+                    window.location.reload();
+//                    if(xhr.response.previousfolderid!="-1"){
+//                    console.log("folder-"+xhr.response.previousfolderid)
+//                    var prevFolder=document.getElementById("folder-"+xhr.response.previousfolderid);
+//                    var summary = prevFolder.querySelectorAll('a')[0]
+//                    console.log(summary)
+//                    var numofspaces=summary.innerHTML.match(/^\s*/)[0].length;
+//                    console.log(numofspaces)
+//                    console.log(prevFolder.innerHTML)
+//                    prevFolder.innerHTML+="<details id='folder-"+xhr.response.folderid+"'><summary><a href='http://127.0.0.1:8000/?q="+xhr.response.foldername+"'>"+" ".repeat(numofspaces)+"  "+xhr.response.foldername+"</a><a class='deleteBtn' href='/delete-folder/"+xhr.response.folderid+"/'><i class='fa-solid fa-trash'></i></a></summary></details>"
+//                    }else{
+//                        document.getElementById("userfolders").innerHTML+="<details id='folder-"+xhr.response.folderid+"'><summary><a href='http://127.0.0.1:8000/?q="+xhr.response.foldername+"'>"+" ".repeat(numofspaces)+"  "+xhr.response.foldername+"</a><a class='deleteBtn' href='/delete-folder/"+xhr.response.folderid+"/'><i class='fa-solid fa-trash'></i></a></summary></details>"
+//                    }
+                  }
+            }else if(xhr.status===404){
+                alert("error")
+              }else if(xhr.status===500){
+                  alert("error")
+              }
+          }
+          xhr.send(formData)
+    }
+    function handleFolderCreateOpen(){
+        isdeckform=false;
+        modalHeader.innerHTML="Create Folder"
+        modalContent.innerHTML=`{%csrf_token%}
+        <p>
+            <label for="previous_folder">Parent Folder</label>
+        <select name="previous_folder" id="previous_folder">
+            <option value="-1">None</option>
+            {%for i in folders%}
+            <option value="{{i.id}}">{{i.name}}</option>
+            {%endfor%}
+        </select>
+    </p>
+    <p>
+        <label for="name">Name</label>
+        <input id="name" type="text" name="name" value="">
+    </p>
+    <p>
+        <label for="description">Description</label>
+        <textarea type="text" id="description" name="description"></textarea>
+    </p>`
+
+    }
+    function handleDeckCreateOpen(){
+        isdeckform=true;
+        modalHeader.innerHTML="Create Deck"
+        modalContent.innerHTML=`{%csrf_token%}
+        <p>
+            <label for="folder">Folder</label>
+        <select name="folder" id="folder">
+            {%for i in folders%}
+            <option value="{{i.id}}">{{i.name}}</option>
+            {%endfor%}
+        </select>
+    </p>
+    <p>
+        <label for="name">Name</label>
+        <input id="name" type="text" name="name" value="">
+    </p>
+    <p>
+        <label for="description">Description</label>
+        <textarea type="text" id="description" name="description"></textarea>
+    </p>`
+
+    }
+</script>
+{% endblock content %}
